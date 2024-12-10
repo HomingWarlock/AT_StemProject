@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class GridPosManager : MonoBehaviour
 {
@@ -9,6 +11,8 @@ public class GridPosManager : MonoBehaviour
     [SerializeField] private Camera cam;
     [SerializeField] private LayerMask grid_layer;
     private Vector3 last_pos;
+
+    public event Action OnClicked, OnExit;
 
     private void Awake()
     {
@@ -21,6 +25,22 @@ public class GridPosManager : MonoBehaviour
             Destroy(Instance);
         }
     }
+
+    private void Update()
+    {
+        if (Input.GetMouseButton(0))
+        {
+            OnClicked?.Invoke();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            OnExit?.Invoke();
+        }
+    }
+
+    public bool IsPointerOverUI()
+        => EventSystem.current.IsPointerOverGameObject();
 
     public Vector3 GetGridPosition()
     {
