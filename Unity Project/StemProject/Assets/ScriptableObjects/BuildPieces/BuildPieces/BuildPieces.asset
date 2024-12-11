@@ -13,7 +13,23 @@ MonoBehaviour:
   m_Name: BuildPieces
   m_EditorClassIdentifier: 
   build_data:
-  - <Name>k__BackingField: Test Floor
+  - <Name>k__BackingField: Basic Block
     <ID>k__BackingField: 0
     <Size>k__BackingField: {x: 1, y: 1}
-    <Prefab>k__BackingField: {fileID: 4211888714128832243, guid: 13a86b4c56ef4da49be71c7dbcdb8633, type: 3}
+    <Prefab>k__BackingField: {fileID: 2381779085621349519, guid: ce37d47a0a861a442b2fc248aad3cde7, type: 3}
+  - <Name>k__BackingField: Dirt
+    <ID>k__BackingField: 1
+    <Size>k__BackingField: {x: 1, y: 1}
+    <Prefab>k__BackingField: {fileID: 2802722009846384554, guid: e1c30c088b2e5f841abdee4e3223fa3f, type: 3}
+  - <Name>k__BackingField: Grass
+    <ID>k__BackingField: 2
+    <Size>k__BackingField: {x: 1, y: 1}
+    <Prefab>k__BackingField: {fileID: 7818306377350217966, guid: 07e781acf4faa62438fed15b44e9a787, type: 3}
+  - <Name>k__BackingField: Wood
+    <ID>k__BackingField: 3
+    <Size>k__BackingField: {x: 1, y: 1}
+    <Prefab>k__BackingField: {fileID: 4480194838886451046, guid: 5ab10db7797731047973244d1e78754e, type: 3}
+  - <Name>k__BackingField: Brick
+    <ID>k__BackingField: 4
+    <Size>k__BackingField: {x: 1, y: 1}
+    <Prefab>k__BackingField: {fileID: 3681189532177928109, guid: 92e3e9f89dd46bc4bb49a8a393aaf322, type: 3}

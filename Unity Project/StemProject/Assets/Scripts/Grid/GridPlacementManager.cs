@@ -5,9 +5,16 @@ using UnityEngine;
 
 public class GridPlacementManager : MonoBehaviour
 {
+    public static GridPlacementManager Instance;
+
+    [SerializeField] private GameObject build_piece_holder;
+
     [SerializeField] private GameObject mouse_point_object;
     [SerializeField] private GameObject cell_border_marker;
     [SerializeField] private Grid grid;
+
+    private MeshRenderer cell_border_marker_rend;
+    [SerializeField] private List<Material> cell_border_mats;
 
     [SerializeField] private BuildingPiecesSO build_pieces_SO;
     private int current_object_index;
@@ -16,23 +23,42 @@ public class GridPlacementManager : MonoBehaviour
 
     private bool build_input_delay;
 
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(Instance);
+        }
+    }
+
     private void Start()
     {
         StopPlacement();
         build_input_delay = false;
+        cell_border_marker_rend = cell_border_marker.transform.Find("CellBorderMarker").GetComponent<MeshRenderer>();
+    }
+
+    public void DisplayGrid()
+    {
+        grid_visual.SetActive(true);
+        cell_border_marker.SetActive(true);
     }
 
     public void StartPlacement(int ID)
     {
         StopPlacement();
+        DisplayGrid();
         current_object_index = build_pieces_SO.build_data.FindIndex(data => data.ID == ID);
         if (current_object_index < 0)
         {
             Debug.LogError($"No ID Found {ID}");
             return;
         }
-        grid_visual.SetActive(true);
-        cell_border_marker.SetActive(true);
+        cell_border_marker_rend.material = cell_border_mats[current_object_index];
         GridPosManager.Instance.OnClicked += PlaceBuild;
         GridPosManager.Instance.OnExit += StopPlacement;
     }
@@ -50,7 +76,9 @@ public class GridPlacementManager : MonoBehaviour
             Vector3 mouse_pos = GridPosManager.Instance.GetGridPosition();
             Vector3Int grid_pos = grid.WorldToCell(mouse_pos);
             GameObject newObject = Instantiate(build_pieces_SO.build_data[current_object_index].Prefab);
+            newObject.transform.name = build_pieces_SO.build_data[current_object_index].Name;
             newObject.transform.position = grid.CellToWorld(grid_pos);
+            newObject.transform.parent = build_piece_holder.transform;
         }
     }
 
