@@ -33,3 +33,11 @@ MonoBehaviour:
     <ID>k__BackingField: 4
     <Size>k__BackingField: {x: 1, y: 1}
     <Prefab>k__BackingField: {fileID: 3681189532177928109, guid: 92e3e9f89dd46bc4bb49a8a393aaf322, type: 3}
+  - <Name>k__BackingField: CubeMan
+    <ID>k__BackingField: 5
+    <Size>k__BackingField: {x: 1, y: 1}
+    <Prefab>k__BackingField: {fileID: 2904964040834890455, guid: 515fb830012057f4a81869b59207c1fe, type: 3}
+  - <Name>k__BackingField: CubeWoman
+    <ID>k__BackingField: 6
+    <Size>k__BackingField: {x: 1, y: 1}
+    <Prefab>k__BackingField: {fileID: 3887556776731190318, guid: d3459ffce41f57e48ae53df8a8d5cfb6, type: 3}

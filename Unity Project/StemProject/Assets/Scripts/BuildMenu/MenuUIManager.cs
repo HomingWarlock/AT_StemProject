@@ -2,12 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BuildMenuUIManager : MonoBehaviour
+public class MenuUIManager : MonoBehaviour
 {
     [SerializeField] private GameObject menu_toggle_button;
 
     private bool is_hidden;
     [SerializeField] private GameObject build_menu;
+
+    [SerializeField] private GameObject play_button;
 
     private void Awake()
     {
@@ -31,5 +33,16 @@ public class BuildMenuUIManager : MonoBehaviour
             build_menu.SetActive(true);
             GridPlacementManager.Instance.DisplayGrid();
         }
+    }
+
+    public void HideMenusBeforeTest()
+    {
+        PlayManager.Instance.play_button.SetActive(false);
+        menu_toggle_button.SetActive(false);
+        play_button.SetActive(false);
+        is_hidden = true;
+        build_menu.SetActive(false);
+        GridPlacementManager.Instance.StopPlacement();
+        PlayManager.Instance.PlayTestSetup();
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class GridPlacementManager : MonoBehaviour
@@ -23,6 +24,10 @@ public class GridPlacementManager : MonoBehaviour
 
     private bool build_input_delay;
 
+    private bool is_player_placed;
+    private GameObject current_player_object;
+    [SerializeField] private GameObject player_delete_menu;
+
     private void Awake()
     {
         if (Instance == null)
@@ -33,6 +38,9 @@ public class GridPlacementManager : MonoBehaviour
         {
             Destroy(Instance);
         }
+
+        is_player_placed = false;
+        player_delete_menu.SetActive(false);
     }
 
     private void Start()
@@ -40,6 +48,16 @@ public class GridPlacementManager : MonoBehaviour
         StopPlacement();
         build_input_delay = false;
         cell_border_marker_rend = cell_border_marker.transform.Find("CellBorderMarker").GetComponent<MeshRenderer>();
+    }
+
+    private void Update()
+    {
+        if (current_object_index < 0)
+            return;
+        Vector3 mouse_pos = GridPosManager.Instance.GetGridPosition();
+        Vector3Int grid_pos = grid.WorldToCell(mouse_pos);
+        mouse_point_object.transform.position = mouse_pos;
+        cell_border_marker.transform.position = grid.CellToWorld(grid_pos);
     }
 
     public void DisplayGrid()
@@ -59,11 +77,11 @@ public class GridPlacementManager : MonoBehaviour
             return;
         }
         cell_border_marker_rend.material = cell_border_mats[current_object_index];
-        GridPosManager.Instance.OnClicked += PlaceBuild;
+        GridPosManager.Instance.OnClicked += PrepareBuild;
         GridPosManager.Instance.OnExit += StopPlacement;
     }
 
-    public void PlaceBuild()
+    public void PrepareBuild()
     {
         if (GridPosManager.Instance.IsPointerOverUI())
         {
@@ -71,14 +89,43 @@ public class GridPlacementManager : MonoBehaviour
         }
         else if (!build_input_delay)
         {
-            build_input_delay = true;
-            StartCoroutine(BuildInputDelay());
-            Vector3 mouse_pos = GridPosManager.Instance.GetGridPosition();
-            Vector3Int grid_pos = grid.WorldToCell(mouse_pos);
-            GameObject newObject = Instantiate(build_pieces_SO.build_data[current_object_index].Prefab);
-            newObject.transform.name = build_pieces_SO.build_data[current_object_index].Name;
-            newObject.transform.position = grid.CellToWorld(grid_pos);
-            newObject.transform.parent = build_piece_holder.transform;
+            if (current_object_index == 5 || current_object_index == 6)
+            {
+                if (!is_player_placed)
+                {
+                    PlaceBuild();
+                }
+                else if (is_player_placed)
+                {
+                    player_delete_menu.SetActive(true);
+                }
+            }
+            else
+            {
+                PlaceBuild();
+            }
+        }
+    }
+
+    public void PlaceBuild()
+    {
+        build_input_delay = true;
+        StartCoroutine(BuildInputDelay());
+        Vector3 mouse_pos = GridPosManager.Instance.GetGridPosition();
+        Vector3Int grid_pos = grid.WorldToCell(mouse_pos);
+        GameObject newObject = Instantiate(build_pieces_SO.build_data[current_object_index].Prefab);
+        newObject.transform.name = build_pieces_SO.build_data[current_object_index].Name;
+        newObject.transform.position = grid.CellToWorld(grid_pos);
+        newObject.transform.parent = build_piece_holder.transform;
+
+        if (current_object_index == 5 || current_object_index == 6)
+        {
+            if (!is_player_placed)
+            {
+                is_player_placed = true;
+                current_player_object = newObject;
+                PlayManager.Instance.player_cam_point = current_player_object.transform.Find("PieceObject/Cam_Point").gameObject;
+            }
         }
     }
 
@@ -91,14 +138,11 @@ public class GridPlacementManager : MonoBehaviour
         GridPosManager.Instance.OnExit -= StopPlacement;
     }
 
-    private void Update()
+    public void DeletePlayer()
     {
-        if (current_object_index < 0)
-            return;
-        Vector3 mouse_pos = GridPosManager.Instance.GetGridPosition();
-        Vector3Int grid_pos = grid.WorldToCell(mouse_pos);
-        mouse_point_object.transform.position = mouse_pos;
-        cell_border_marker.transform.position = grid.CellToWorld(grid_pos);
+        player_delete_menu.SetActive(false);
+        Destroy(current_player_object);
+        is_player_placed = false;
     }
 
     public IEnumerator BuildInputDelay()
