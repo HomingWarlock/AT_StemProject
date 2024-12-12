@@ -27,7 +27,7 @@ public class PlayManager : MonoBehaviour
             Destroy(Instance);
         }
 
-        gamemode = "Building";
+        gamemode = "Idle";
     }
 
     public void PlayTestSetup()

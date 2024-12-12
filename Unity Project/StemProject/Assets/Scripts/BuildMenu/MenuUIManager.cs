@@ -24,12 +24,14 @@ public class MenuUIManager : MonoBehaviour
         if (!is_hidden)
         {
             is_hidden = true;
+            PlayManager.Instance.gamemode = "Idle";
             build_menu.SetActive(false);
             GridPlacementManager.Instance.StopPlacement();
         }
         else if (is_hidden) 
         {
             is_hidden = false;
+            PlayManager.Instance.gamemode = "Building";
             build_menu.SetActive(true);
             GridPlacementManager.Instance.DisplayGrid();
         }

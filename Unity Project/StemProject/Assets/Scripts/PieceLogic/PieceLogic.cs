@@ -13,9 +13,12 @@ public class PieceLogic : MonoBehaviour
 
     private void OnMouseOver()
     {
-        if (Input.GetMouseButtonDown(1))
+        if (PlayManager.Instance.gamemode == "Building")
         {
-            Destroy(parent);
+            if (Input.GetMouseButtonDown(1))
+            {
+                Destroy(parent);
+            }
         }
     }
 }
