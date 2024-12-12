@@ -43,4 +43,16 @@ public class PlayManager : MonoBehaviour
         gamemode = "Play";
         Cursor.lockState = CursorLockMode.Locked;
     }
+
+    public void EndPlayTest()
+    {
+        play_button.SetActive(true);
+        grid_holder.SetActive(true);
+
+        play_cam.SetActive(false);
+        build_cam.SetActive(true);
+
+        gamemode = "Building";
+        Cursor.lockState = CursorLockMode.None;
+    }
 }

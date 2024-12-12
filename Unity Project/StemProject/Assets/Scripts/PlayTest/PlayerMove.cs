@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerMove : MonoBehaviour
 {
     private Rigidbody rb;
+    private BoxCollider box_col;
     private GameObject player_model;
 
     private float move_speed;
@@ -15,6 +16,9 @@ public class PlayerMove : MonoBehaviour
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
+        rb.useGravity = false;
+        box_col = transform.Find("PieceObject").GetComponent<BoxCollider>();
+        box_col.enabled = false;
         player_model = transform.Find("PieceObject").gameObject;
 
         move_speed = 5;
@@ -39,6 +43,19 @@ public class PlayerMove : MonoBehaviour
                     rb.velocity = new Vector3(rb.velocity.x, jump_speed, rb.velocity.z);
                 }
             }
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            rb.useGravity = false;
+            box_col.enabled = false;
+            PlayManager.Instance.EndPlayTest();
+        }
+
+        if (PlayManager.Instance.gamemode == "Play" && !rb.useGravity)
+        {
+            rb.useGravity = true;
+            box_col.enabled = true;
         }
     }
 
