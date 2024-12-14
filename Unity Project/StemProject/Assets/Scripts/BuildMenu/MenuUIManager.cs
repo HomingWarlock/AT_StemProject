@@ -4,19 +4,33 @@ using UnityEngine;
 
 public class MenuUIManager : MonoBehaviour
 {
-    [SerializeField] private GameObject menu_toggle_button;
+    public static MenuUIManager Instance;
+
+    public GameObject menu_toggle_button;
 
     private bool is_hidden;
     [SerializeField] private GameObject build_menu;
 
     [SerializeField] private GameObject play_button;
+    [SerializeField] private GameObject no_player_found_menu;
 
     private void Awake()
     {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(Instance);
+        }
+
         menu_toggle_button.SetActive(true);
 
         is_hidden = true;
         build_menu.SetActive(false);
+        play_button.SetActive(true);
+        no_player_found_menu.SetActive(false);
     }
 
     public void ToggleMenu()
@@ -39,12 +53,16 @@ public class MenuUIManager : MonoBehaviour
 
     public void HideMenusBeforeTest()
     {
-        PlayManager.Instance.play_button.SetActive(false);
-        menu_toggle_button.SetActive(false);
-        play_button.SetActive(false);
-        is_hidden = true;
-        build_menu.SetActive(false);
-        GridPlacementManager.Instance.StopPlacement();
+        if (!is_hidden)
+        {
+            ToggleMenu();
+        }
+
         PlayManager.Instance.PlayTestSetup();
+    }
+
+    public void OpenNoPlayerDetectedMenu()
+    {
+        no_player_found_menu.SetActive(true);
     }
 }

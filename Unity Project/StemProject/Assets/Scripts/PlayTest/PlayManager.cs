@@ -8,8 +8,8 @@ public class PlayManager : MonoBehaviour
 
     public string gamemode;
 
-    public GameObject play_button;
     [SerializeField] private GameObject grid_holder;
+    public GameObject play_button;
 
     [SerializeField] private GameObject build_cam;
     public GameObject play_cam;
@@ -32,22 +32,31 @@ public class PlayManager : MonoBehaviour
 
     public void PlayTestSetup()
     {
-        play_button.SetActive(false);
-        grid_holder.SetActive(false);
+        if (GridPlacementManager.Instance.current_player_object != null)
+        {
+            MenuUIManager.Instance.menu_toggle_button.SetActive(false);
+            grid_holder.SetActive(false);
+            play_button.SetActive(false);
 
-        play_cam.SetActive(true);
-        build_cam.SetActive(false);
+            play_cam.SetActive(true);
+            build_cam.SetActive(false);
 
-        CamFollow.Instance.SetNewPlayerFocus(player_cam_point);
+            CamFollow.Instance.SetNewPlayerFocus(player_cam_point);
 
-        gamemode = "Play";
-        Cursor.lockState = CursorLockMode.Locked;
+            gamemode = "Play";
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+        else if (GridPlacementManager.Instance.current_player_object == null)
+        {
+            MenuUIManager.Instance.OpenNoPlayerDetectedMenu();
+        }
     }
 
     public void EndPlayTest()
     {
-        play_button.SetActive(true);
+        MenuUIManager.Instance.menu_toggle_button.SetActive(true);
         grid_holder.SetActive(true);
+        play_button.SetActive(true);
 
         play_cam.SetActive(false);
         build_cam.SetActive(true);

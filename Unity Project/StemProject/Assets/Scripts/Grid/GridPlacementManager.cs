@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class GridPlacementManager : MonoBehaviour
@@ -25,7 +24,7 @@ public class GridPlacementManager : MonoBehaviour
     private bool build_input_delay;
 
     private bool is_player_placed;
-    private GameObject current_player_object;
+    public GameObject current_player_object;
     [SerializeField] private GameObject player_delete_menu;
 
     private void Awake()
